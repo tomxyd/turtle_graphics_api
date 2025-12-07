@@ -1,5 +1,9 @@
 #ifndef TURTLE_H
 #define TURTLE_H
+#include <iostream>
+#include <glm/glm.hpp>
+#include <vector>
+
 class Turtle
 {
 public:
@@ -9,37 +13,17 @@ public:
     std::vector<glm::vec2> m_points;
 
     Turtle();
-
     void init(float x, float y, float angle);
-
-    void forward(float distance);
-    
+    void forward(float distance);  
     void backward(float distance);
-
     void position();
+    void heading();
+    void turn_left(float angle);
+    void turn_right(float angle);
+    void set_pos(float x, float y = 0.f);
 
-    void heading()
-    {
-        std::cout << degree << "\n";
-    }
-
-    void left(float angle)
-    {
-        this->degree = degree + angle;
-    }
-
-    void right(float angle)
-    {
-        this->degree = 360 - (angle - degree);
-    }
-
-    void set_pos(float x, float y = 0.f) {
-        this->x = x / 100.f;
-        this->y = y / 100.f;
-    }
 private:
     void add_point(glm::vec2 point);
-
     const float m_PI = 3.1415926535;
 };
 

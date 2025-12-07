@@ -10,20 +10,20 @@ void Turtle::init(float x, float y, float angle) {
     m_y = y;
     m_degree = angle;
 
-    add_point(glm::vec2(x, y));
+    add_point(glm::vec2(m_x, m_y));
 }
 
 void Turtle::add_point(glm::vec2 point) {
-    points.push_back(point);
+    m_points.push_back(point);
     
 }
 
 void Turtle::forward(float distance) {
     distance = distance / 100.f;
-    x += distance * std::cos(degree * (m_PI / 180));
-    y += distance * std::sin(degree * (m_PI / 180));
+    m_x += distance * std::cos(m_degree * (m_PI / 180));
+    m_y += distance * std::sin(m_degree * (m_PI / 180));
 
-    glm::vec2 vec(x, y);
+    glm::vec2 vec(m_x, m_y);
     add_point(vec);
 }
 
@@ -32,5 +32,25 @@ void Turtle::backward(float distance) {
 }
 
 void Turtle::position() {
-    std::cout << "(" << x * 100.f << "," << y * 100.f << ")\n";
+    std::cout << "(" << m_x * 100.f << "," << m_y * 100.f << ")\n";
+}
+
+void Turtle::heading()
+{
+    std::cout << m_degree << "\n";
+}
+
+void Turtle::turn_left(float angle)
+{
+    m_degree = m_degree + angle;
+}
+
+void Turtle::turn_right(float angle)
+{
+    m_degree = 360 - (angle - m_degree);
+}
+
+void Turtle::set_pos(float x, float y) {
+    m_x = x / 100.f;
+    m_y = y / 100.f;
 }

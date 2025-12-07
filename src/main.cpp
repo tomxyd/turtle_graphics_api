@@ -117,7 +117,7 @@ void init() {
     GLuint buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, t.points.size() * sizeof(vec2), t.points.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, t.m_points.size() * sizeof(vec2), t.m_points.data(), GL_STATIC_DRAW);
 
     // Initialize the vertex position attribute from the vertex shader
 
@@ -129,5 +129,5 @@ void init() {
 void display() {
     glClearColor(0.f,0.f,0.f,1.f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_LINE_STRIP, 0, t.points.size());
+    glDrawArrays(GL_LINE_STRIP, 0, t.m_points.size());
 }
