@@ -21,6 +21,15 @@ public:
     void turn_left(float angle);
     void turn_right(float angle);
     void set_pos(float x, float y = 0.f);
+    void set_x(float x);
+    void set_y(float y);
+    void set_heading(float degree);
+    void home();
+    void fill_color(int r, int g, int b);
+    void square();
+    void square(float size_length);
+    void triangle();
+    void triangle(float size_length);
 
 private:
     void add_point(glm::vec2 point);

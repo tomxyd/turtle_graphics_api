@@ -54,3 +54,58 @@ void Turtle::set_pos(float x, float y) {
     m_x = x / 100.f;
     m_y = y / 100.f;
 }
+
+void Turtle::set_x(float x) {
+    m_x = x / 100.f;
+}
+
+void Turtle::set_y(float y) {
+    m_y = y / 100.f;
+}
+void Turtle::set_heading(float degree) {
+    m_degree = degree;
+}
+
+void Turtle::home()
+{
+    m_x = 0.f;
+    m_y = 0.f;
+    m_degree = 0.f;
+}
+
+void Turtle::square() {
+    for (int i = 0; i < 4; i++)
+    {
+        forward(50);
+        turn_right(90);
+    }
+}
+
+void Turtle::square(float size_length) {
+    for (int i = 0; i < 4; ++i) {
+        forward(size_length);
+        turn_right(90);
+    }
+}
+
+void Turtle::triangle() {
+
+    forward(25);
+    turn_left(120);
+    forward(25);
+    turn_left(120);
+    forward(25);
+}
+
+void Turtle::triangle(float size_length) {
+
+    forward(size_length);
+    turn_left(120);
+    forward(size_length);
+    turn_left(120);
+    forward(size_length);
+}
+
+void Turtle::fill_color(int r, int g, int b) {
+
+}

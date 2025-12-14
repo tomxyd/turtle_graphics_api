@@ -6,6 +6,7 @@
 #include <vector>
 
 #define BUFFER_OFFSET(bytes) ((GLvoid*) (bytes))
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void init();
@@ -92,13 +93,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void draw_turtle()
 {
-    t.position();
-    t.set_pos(60.f, 30.f);
-    t.position();
-    t.set_pos(20.f, 80.f);
-    t.position();
-    t.set_pos(0.f, 0.f);
-    t.position();
+    t.triangle(50);
 
 }
 void init() {
