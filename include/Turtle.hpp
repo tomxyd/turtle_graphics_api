@@ -30,10 +30,12 @@ public:
     void square(float size_length);
     void triangle();
     void triangle(float size_length);
+    void add_point(glm::vec2 point);
+
 
 private:
-    void add_point(glm::vec2 point);
     const float m_PI = 3.1415926535;
+    const float m_MAX_LENGTH = 1000.f;
 };
 
 #endif

@@ -5,13 +5,13 @@
 #include <iostream>
 #include <vector>
 
-#define BUFFER_OFFSET(bytes) ((GLvoid*) (bytes))
-
+typedef glm::vec2 vec2;
+#define BUFFER_OFFSET(bytes) ((GLvoid*) (bytes)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+void koch_snowflake(const vec2& a, const vec2& b, int depth);
 void init();
 void display();
-void draw_turtle();
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -19,9 +19,15 @@ const unsigned int SCR_HEIGHT = 600;
 
 unsigned int VBO;
 unsigned int VAO;
-typedef glm::vec2 vec2;
 
-Turtle t;
+
+const int depth = 5;
+const int size = 3 * 1024;
+int counter = 0;
+float y_offset = 0.5f;
+float epsilon = 0.025f;
+
+vec2 points[size];
 
 
 int main()
@@ -90,17 +96,44 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-
-void draw_turtle()
+void koch_snowflake(const vec2& a, const vec2& b, int depth)
 {
-    t.triangle(50);
 
+    if (depth == 0)
+    {
+        points[counter++] = b;
+        return;
+    }
+    vec2 v0 = a + ((b - a)/ 3.0f);
+    vec2 v2 = a + (2.f / 3 * (b - a));
+    vec2 d = v2 - v0;
+    float c = 0.5;
+    float s = 0.8660254;
+    vec2 drot = vec2(c * d.x -  s * d.y, s * d.x + c * d.y);
+    vec2 v1 = (v0 + drot);
+
+    koch_snowflake(a, v0, depth - 1);
+    koch_snowflake(v0, v1, depth - 1);
+    koch_snowflake(v1, v2, depth - 1);
+    koch_snowflake(v2, b, depth - 1);
 }
+
+
 void init() {
 
 
-    draw_turtle();
+    //provide data for triangle
+    vec2 triangle[3] = { vec2(-0.5, 0.5), vec2(0.5,0.5), vec2(0, -0.5) };
+    points[counter] = triangle[0];
+    counter++;
+    koch_snowflake(triangle[0], triangle[1], depth);
+    koch_snowflake(triangle[1], triangle[2], depth);
+    koch_snowflake(triangle[2], triangle[0], depth);
 
+    for (int i = 0; i < size; ++i)
+    {
+        std::cout << points[i].x <<",y: " << points[i].y << std::endl;
+    }
 
     Shader ourShader(RESOURCES_PATH "vertex.vc", RESOURCES_PATH "fragment.fc");
     ourShader.use();
@@ -112,17 +145,17 @@ void init() {
     GLuint buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, t.m_points.size() * sizeof(vec2), t.m_points.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 
     // Initialize the vertex position attribute from the vertex shader
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0,
-        BUFFER_OFFSET(0));
+        BUFFER_OFFSET(0)));
     glEnableVertexAttribArray(0);
 }
 
 void display() {
     glClearColor(0.f,0.f,0.f,1.f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_LINE_STRIP, 0, t.m_points.size());
+    glDrawArrays(GL_LINE_LOOP, 0, size);
 }
