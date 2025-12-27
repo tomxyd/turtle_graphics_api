@@ -9,7 +9,7 @@ typedef glm::vec2 vec2;
 #define BUFFER_OFFSET(bytes) ((GLvoid*) (bytes)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-void koch_snowflake(const vec2& a, const vec2& b, int depth);
+void draw_box(float width, float origin);
 void init();
 void display();
 
@@ -21,11 +21,7 @@ unsigned int VBO;
 unsigned int VAO;
 
 
-const int depth = 5;
-const int size = 3 * 1024;
-int counter = 0;
-float y_offset = 0.5f;
-float epsilon = 0.025f;
+const int size = 8;
 
 vec2 points[size];
 
@@ -96,44 +92,29 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void koch_snowflake(const vec2& a, const vec2& b, int depth)
-{
+void draw_box( float width, float origin) {
+    width = width / 100.f;
 
-    if (depth == 0)
-    {
-        points[counter++] = b;
-        return;
+    float pos_length_size = origin + width;
+    float neg_length_size = origin - width;
+
+    vec2 box[4] = {
+        vec2(origin,origin),
+        vec2(pos_length_size, origin),
+        vec2(pos_length_size, neg_length_size),
+        vec2(origin, neg_length_size)
+    };
+
+    for (int i = 0; i < 4; ++i) {
+        points[i] = box[i];
     }
-    vec2 v0 = a + ((b - a)/ 3.0f);
-    vec2 v2 = a + (2.f / 3 * (b - a));
-    vec2 d = v2 - v0;
-    float c = 0.5;
-    float s = 0.8660254;
-    vec2 drot = vec2(c * d.x -  s * d.y, s * d.x + c * d.y);
-    vec2 v1 = (v0 + drot);
-
-    koch_snowflake(a, v0, depth - 1);
-    koch_snowflake(v0, v1, depth - 1);
-    koch_snowflake(v1, v2, depth - 1);
-    koch_snowflake(v2, b, depth - 1);
 }
-
 
 void init() {
 
-
-    //provide data for triangle
-    vec2 triangle[3] = { vec2(-0.5, 0.5), vec2(0.5,0.5), vec2(0, -0.5) };
-    points[counter] = triangle[0];
-    counter++;
-    koch_snowflake(triangle[0], triangle[1], depth);
-    koch_snowflake(triangle[1], triangle[2], depth);
-    koch_snowflake(triangle[2], triangle[0], depth);
-
-    for (int i = 0; i < size; ++i)
-    {
-        std::cout << points[i].x <<",y: " << points[i].y << std::endl;
-    }
+    draw_box(10.f,0.f);
+    //TO DO: It seems I have to seperate the draw calls.
+    draw_box(10.f,0.1f);
 
     Shader ourShader(RESOURCES_PATH "vertex.vc", RESOURCES_PATH "fragment.fc");
     ourShader.use();
